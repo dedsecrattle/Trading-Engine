@@ -29,7 +29,6 @@ impl PriceLevel {
         self.orders.push_back(order);
     }
 
-    /// Match incoming **buy** against the front of this ask level. Returns `None` if this level has no orders.
     pub fn match_incoming_buy(&mut self, incoming: &mut Order, trade_id: u64) -> Option<Trade> {
         let resting = self.orders.front_mut()?;
         let trade_qty = incoming.remaining.min(resting.remaining);
@@ -48,7 +47,6 @@ impl PriceLevel {
         Some(trade)
     }
 
-    /// Match incoming **sell** against the front of this bid level. Returns `None` if this level has no orders.
     pub fn match_incoming_sell(&mut self, incoming: &mut Order, trade_id: u64) -> Option<Trade> {
         let resting = self.orders.front_mut()?;
         let trade_qty = incoming.remaining.min(resting.remaining);
@@ -98,8 +96,6 @@ impl OrderBook {
         self.asks.keys().next().copied()
     }
 
-    /// Match a buy against resting sells. `max_ask_price` is inclusive; use `u64::MAX` for a market buy.
-    /// Returns produced trades and the next unused trade id.
     pub fn match_incoming_buy(
         &mut self,
         incoming: &mut Order,
@@ -129,11 +125,7 @@ impl OrderBook {
             next_trade_id += 1;
             trades.push(trade);
 
-            if self
-                .asks
-                .get(&ask_price)
-                .is_some_and(|lvl| lvl.is_empty())
-            {
+            if self.asks.get(&ask_price).is_some_and(|lvl| lvl.is_empty()) {
                 self.asks.remove(&ask_price);
             }
         }
@@ -141,7 +133,6 @@ impl OrderBook {
         (trades, next_trade_id)
     }
 
-    /// Match a sell against resting buys. `min_bid_price` is inclusive; use `0` for a market sell.
     pub fn match_incoming_sell(
         &mut self,
         incoming: &mut Order,
@@ -171,11 +162,7 @@ impl OrderBook {
             next_trade_id += 1;
             trades.push(trade);
 
-            if self
-                .bids
-                .get(&bid_price)
-                .is_some_and(|lvl| lvl.is_empty())
-            {
+            if self.bids.get(&bid_price).is_some_and(|lvl| lvl.is_empty()) {
                 self.bids.remove(&bid_price);
             }
         }
@@ -183,7 +170,6 @@ impl OrderBook {
         (trades, next_trade_id)
     }
 
-    /// Append a limit order that still has remaining quantity after matching.
     pub fn insert_resting_limit(&mut self, order: Order) {
         let price = order
             .price
