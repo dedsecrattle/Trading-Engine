@@ -1,4 +1,4 @@
-# trading-engine
+# Trading Engine
 
 A small in-memory **limit-order-book** and **matching engine** in Rust: resting orders, price-time priority at each level, limit and market orders, and trade capture with timestamps.
 
