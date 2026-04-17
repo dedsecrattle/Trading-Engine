@@ -12,7 +12,7 @@ pub enum OrderType {
     Market,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Order {
     id: u64,
     side: Side,
