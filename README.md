@@ -1,6 +1,6 @@
 # Trading Engine
 
-A small in-memory **limit-order-book** and **matching engine** in Rust: resting orders, price-time priority at each level, limit and market orders, and trade capture with timestamps.
+**trading-engine** is a minimal Rust **central limit order book (CLOB)** matcher: it keeps bids and asks in memory, matches **limit** and **market** orders at the best prices, applies **FIFO** within each price level, and records every fill with **UTC timestamps**. It is aimed at learning, demos, and as a small core you can grow into simulations or services.
 
 ## Quick start
 

@@ -2,6 +2,7 @@
 name = "trading-engine"
 version = "0.1.0"
 edition = "2024"
+description = "Minimal in-memory central limit order book: limit/market matching, FIFO per level, timestamped trades."
 
 [dependencies]
 chrono = { version = "0.4", features = ["serde"] }
