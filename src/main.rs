@@ -8,27 +8,27 @@ fn print_order_book(engine: &MatchingEngine) {
     let ob = engine.order_book();
     println!("\n--- order book ---");
     println!("asks (lowest first):");
-    for (price, level) in ob.asks.iter() {
-        for o in &level.orders {
+    for (price, level) in ob.asks().iter() {
+        for o in level.orders() {
             println!(
                 "  @{}  sell  order {}  remaining {}",
                 price, o.id, o.remaining
             );
         }
     }
-    if ob.asks.is_empty() {
+    if ob.asks().is_empty() {
         println!("  (empty)");
     }
     println!("bids (highest first):");
-    for (price, level) in ob.bids.iter().rev() {
-        for o in &level.orders {
+    for (price, level) in ob.bids().iter().rev() {
+        for o in level.orders() {
             println!(
                 "  @{}  buy   order {}  remaining {}",
                 price, o.id, o.remaining
             );
         }
     }
-    if ob.bids.is_empty() {
+    if ob.bids().is_empty() {
         println!("  (empty)");
     }
 }
@@ -56,9 +56,7 @@ fn main() {
         ))
         .expect("sell 101");
 
-    println!(
-        "\n2) Aggressive limit buy 20 @ 102 — walks both ask levels"
-    );
+    println!("\n2) Aggressive limit buy 20 @ 102 — walks both ask levels");
     let t1 = engine
         .submit_limit_order(Order::new(
             Side::Buy,
@@ -101,6 +99,9 @@ fn main() {
         );
     }
 
-    println!("\n4) Cumulative fills (engine.trades): {}", engine.trades().len());
+    println!(
+        "\n4) Cumulative fills (engine.trades): {}",
+        engine.trades().len()
+    );
     print_order_book(&engine);
 }
